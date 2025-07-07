@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Music Generator Control</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+        }
+        h1 {
+            margin-top: 0;
+            color: #1a1a1a;
+        }
+        .control-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        #startButton {
+            background-color: #28a745;
+            color: white;
+        }
+        #startButton:hover {
+            background-color: #218838;
+        }
+        #startButton:disabled {
+            background-color: #a3d3ab;
+            cursor: not-allowed;
+        }
+        #stopButton {
+            background-color: #dc3545;
+            color: white;
+        }
+        #stopButton:hover {
+            background-color: #c82333;
+        }
+        #stopButton:disabled {
+            background-color: #c7c7c7;
+            cursor: not-allowed;
+        }
+        #status, #results {
+            margin-top: 20px;
+            font-style: italic;
+            color: #666;
+            min-height: 20px;
+            line-height: 1.5;
+        }
+        #fileName {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Music Generation Controller</h1>
+
+    <div class="control-group">
+        <label for="audioFileInput">Carica un file audio (.wav) per definire l'emozione</label>
+        <input type="file" id="audioFileInput" accept=".wav,audio/wav">
+        <div id="fileName">Nessun file selezionato</div>
+    </div>
+
+    <div class="button-group">
+        <button id="startButton">▶ Start Generation</button>
+        <button id="stopButton" disabled>■ Stop Generation</button>
+    </div>
+
+    <div id="status">Status: In attesa</div>
+    <div id="results"></div>
+</div>
+
+<script>
+    const audioFileInput = document.getElementById('audioFileInput');
+    const fileNameDiv = document.getElementById('fileName');
+    const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+    const statusDiv = document.getElementById('status');
+    const resultsDiv = document.getElementById('results');
+
+    let currentSessionId = null;
+
+    audioFileInput.addEventListener('change', () => {
+        if (audioFileInput.files.length > 0) {
+            fileNameDiv.textContent = audioFileInput.files[0].name;
+        } else {
+            fileNameDiv.textContent = 'Nessun file selezionato';
+        }
+    });
+
+    startButton.addEventListener('click', async () => {
+        const file = audioFileInput.files[0];
+
+        if (!file) {
+            alert('Per favore, seleziona un file audio (.wav) prima di iniziare.');
+            return;
+        }
+
+        startButton.disabled = true;
+        stopButton.disabled = false;
+        statusDiv.textContent = 'Caricamento e analisi del file audio in corso...';
+        resultsDiv.innerHTML = '';
+
+        const formData = new FormData();
+        formData.append('audio_file', file);
+
+        try {
+            const response = await fetch('/start_generation', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || `Errore dal server: ${response.statusText}`);
+            }
+
+            currentSessionId = data.session_id;
+            statusDiv.textContent = `Generazione avviata (Sessione: ${currentSessionId.substring(0, 8)}...). Streaming verso Max/MSP.`;
+            resultsDiv.innerHTML = `Valori calcolati: <b>Valence: ${data.valence}</b>, <b>Arousal: ${data.arousal}</b>`;
+
+        } catch (error) {
+            console.error('Errore durante l\'avvio della generazione:', error);
+            statusDiv.textContent = `Errore: ${error.message}`;
+            resultsDiv.innerHTML = '';
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        }
+    });
+
+    stopButton.addEventListener('click', async () => {
+        if (!currentSessionId) return;
+
+        statusDiv.textContent = 'Inviando richiesta di stop...';
+        resultsDiv.innerHTML = '';
+
+        try {
+            const response = await fetch('/stop_generation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ session_id: currentSessionId }),
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || `Errore dal server: ${response.statusText}`);
+            }
+
+            statusDiv.textContent = `Generazione fermata. Pronto per un nuovo avvio.`;
+            currentSessionId = null;
+            startButton.disabled = false;
+            stopButton.disabled = true;
+
+        } catch (error) {
+            console.error('Errore durante lo stop della generazione:', error);
+            statusDiv.textContent = `Errore: ${error.message}`;
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        }
+    });
+</script>
+
+</body>
+</html>

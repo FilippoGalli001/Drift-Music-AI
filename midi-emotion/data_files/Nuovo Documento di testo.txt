@@ -1,0 +1,83 @@
+import csv
+import os
+from pathlib import Path
+
+# --- Configurazione ---
+# Specifica il percorso al tuo file CSV
+csv_file_path = 'C:\\Users\\fgall\\Desktop\\midi-emotion\\data_files\\lakh_spotify_emotion.csv' # <--- MODIFICA QUESTO CON IL NOME DEL TUO FILE CSV
+
+# Specifica il percorso alla cartella principale contenente i file MIDI (es. lmd_full)
+lmd_full_dir_path = 'C:\\Users\\fgall\\Desktop\\midi-emotion\\data_files\\lmd_full'    # <--- MODIFICA QUESTO SE LA CARTELLA HA UN NOME DIVERSO O SI TROVA ALTROVE
+# ---------------------
+
+# --- 1. Carica i dati dal CSV in un dizionario per una ricerca veloce ---
+# Usiamo il nome del file come chiave e il valore booleano di 'is_matched' come valore
+csv_data = {}
+try:
+    with open(csv_file_path, mode='r', encoding='utf-8') as infile:
+        reader = csv.DictReader(infile)
+
+        # Verifica che le colonne necessarie siano presenti nel CSV
+        if 'file' not in reader.fieldnames or 'is_matched' not in reader.fieldnames:
+             print(f"Errore: Il file CSV '{csv_file_path}' deve contenere le colonne 'file' e 'is_matched'.")
+             exit()
+
+        for row in reader:
+            file_name = row.get('file')
+            is_matched_str = row.get('is_matched')
+
+            if file_name: # Assicurati che il nome del file non sia vuoto
+                # Converti la stringa 'True'/'False'/'' in un valore booleano
+                # 'True' -> True, 'False' o stringa vuota -> False
+                is_matched_bool = (is_matched_str.lower() == 'true') if is_matched_str else False
+                csv_data[file_name] = is_matched_bool
+
+except FileNotFoundError:
+    print(f"Errore: File CSV non trovato a '{csv_file_path}'")
+    exit()
+except Exception as e:
+    print(f"Errore durante la lettura del CSV: {e}")
+    exit()
+
+print(f"Caricate {len(csv_data)} voci dal file CSV per la ricerca.")
+
+# --- 2. Attraversa la cartella, cerca i file MIDI e controlla le corrispondenze nel CSV ---
+matched_in_csv_count = 0
+matched_and_is_true_count = 0
+midi_files_found = 0
+
+print(f"\nScansione della cartella '{lmd_full_dir_path}' per i file MIDI...")
+
+try:
+    if not os.path.isdir(lmd_full_dir_path):
+         print(f"Errore: La cartella '{lmd_full_dir_path}' non esiste o non è una cartella valida.")
+         exit()
+
+    # os.walk attraversa tutte le sottocartelle
+    for root, _, filenames in os.walk(lmd_full_dir_path):
+        for filename in filenames:
+            # Controlla se il file ha estensione .midi (case-insensitive)
+            if filename.lower().endswith('.mid'):
+                midi_files_found += 1
+                # Estrai il nome del file senza percorso ed estensione
+                file_base_name = Path(filename).stem
+
+                # Controlla se questo nome base esiste nel nostro dizionario CSV
+                if file_base_name in csv_data:
+                    matched_in_csv_count += 1
+
+                    # Controlla il valore booleano di 'is_matched' dal CSV
+                    if csv_data[file_base_name] is True:
+                        matched_and_is_true_count += 1
+
+except Exception as e:
+    print(f"Errore durante la scansione della cartella '{lmd_full_dir_path}': {e}")
+    exit()
+
+
+# --- 3. Stampa i risultati ---
+print("-" * 30)
+print(f"Scansione completata.")
+print(f"Numero totale di file MIDI trovati nella cartella: {midi_files_found}")
+print(f"Numero di file MIDI trovati con corrispondenza nel CSV: {matched_in_csv_count}")
+print(f"Numero di file MIDI trovati con corrispondenza nel CSV E 'is_matched' = True: {matched_and_is_true_count}")

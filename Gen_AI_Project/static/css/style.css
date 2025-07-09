@@ -1,0 +1,83 @@
+    body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    margin: 0;
+    background-color: #f0f2f5;
+    color: #333;
+}
+.main-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    width: 90%;
+    max-width: 1100px;
+    margin-bottom: 30px;
+}
+.container {
+    background: white;
+    padding: 20px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex-shrink: 0;
+}
+.controller-container {
+    width: 450px;
+}
+.chart-container {
+    width: 450px;
+    height: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h1 { margin-top: 0; color: #1a1a1a; }
+h2 { font-size: 1.2rem; margin-top: 10px; margin-bottom: 10px; }
+.control-group { margin-bottom: 25px; }
+label { display: block; margin-bottom: 10px; font-weight: 600; }
+input[type="file"] { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.button-group, .record-button-group { display: flex; gap: 10px; justify-content: center; align-items: center; margin-top: 15px; }
+button { padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s ease-in-out; }
+#startAiButton, #playMappedMidiButton { background-color: #28a745; color: white; }
+#startAiButton:hover, #playMappedMidiButton:hover { background-color: #218838; }
+#startAiButton:disabled, #playMappedMidiButton:disabled { background-color: #a3d3ab; cursor: not-allowed; }
+#stopAiButton, #stopMidiButton { background-color: #dc3545; color: white; }
+#stopAiButton:hover, #stopMidiButton:hover { background-color: #c82333; }
+#stopAiButton:disabled, #stopMidiButton:disabled { background-color: #c7c7c7; cursor: not-allowed; }
+#recordButton { background-color: #007bff; color: white; }
+#recordButton:hover { background-color: #0056b3; }
+#recordButton.is-recording { background-color: #dc3545; }
+.status-box, .results-box { margin-top: 20px; font-style: italic; color: #666; min-height: 20px; line-height: 1.5; }
+.file-name-display { margin-top: 10px; font-size: 0.9em; color: #555; min-height: 1.2em; }
+.results-box p { margin: 5px 0; }
+
+/* --- STYLES FOR EMOTION CHART --- */
+#emotion-wheel {
+    width: 350px; height: 350px; border-radius: 50%; border: 2px solid #007bff;
+    position: relative; background-color: #f8f9fa; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 1rem auto;
+}
+#neutral-zone {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    border-radius: 50%; background-color: rgba(128, 128, 128, 0.1); border: 2px dashed #888;
+    box-sizing: border-box; pointer-events: none; display: flex; justify-content: center; align-items: center;
+    font-weight: bold; color: #666;
+}
+#click-marker {
+    width: 18px; height: 18px; background-color: #dc3545; border: 3px solid white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); border-radius: 50%; position: absolute;
+    transform: translate(-50%, -50%); pointer-events: none; display: none;
+    transition: top 0.3s ease-out, left 0.3s ease-out;
+}
+.emotion-label {
+    position: absolute; transform: translate(-50%, -50%); background-color: rgba(255, 255, 255, 0.7);
+    padding: 2px 6px; border-radius: 5px; font-size: 11px;
+    pointer-events: none; font-weight: 500; border: 1px solid #ddd;
+}
+.va-info { display: flex; justify-content: space-around; width: 100%; margin-top: 15px; }
+.va-info div { font-size: 1em; }

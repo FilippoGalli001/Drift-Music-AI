@@ -42,7 +42,7 @@ def transcription_model(audio_file):
 # -----------------------------
 def classify_emotion(audio_file):
     # Load pre-trained emotion model
-    model = audonnx.load("C:\\Users\\fgall\\Desktop\\music_AI_workshop\\Gen_AI_Project\\Valence_Arousal_Speech\\w2v2-L-robust-12")
+    model = audonnx.load("C:\\Users\\fgall\\Desktop\\Drift-Music-AI\\Gen_AI_Project\\Valence_Arousal_Speech\\w2v2-L-robust-12")
 
     # Load your audio file
     signal, sampling_rate = sf.read(audio_file, always_2d=False)
@@ -68,7 +68,7 @@ def classify_emotion(audio_file):
 
 def get_valence_arousal_lexicon(text):
     # Load the VAD lexicon (assumes the .txt file is in the same folder)
-    vad = pd.read_csv("C:\\Users\\fgall\\Desktop\\music_AI_workshop\\Gen_AI_Project\\Valence_Arousal_Speech\\NRC-VAD-Lexicon-v2.1.txt", sep="\t", skiprows=1,
+    vad = pd.read_csv("C:\\Users\\fgall\\Desktop\\Drift-Music-AI\\Gen_AI_Project\\Valence_Arousal_Speech\\NRC-VAD-Lexicon-v2.1.txt", sep="\t", skiprows=1,
                       names=["word", "valence", "arousal", "dominance"])
     vad_dict = vad.set_index("word")[["valence", "arousal"]].to_dict(orient="index")
 
@@ -101,3 +101,4 @@ va_text = get_valence_arousal_lexicon(transcription["text"])
 print(va_text)
 
 """
+

@@ -15,7 +15,8 @@ from pythonosc import udp_client
 
 # --- PATH SETUP AND CUSTOM MODULE IMPORTS ---
 script_path = Path(__file__).resolve()
-project_root = script_path.parents[2]
+project_root = script_path.parents[1]
+print(project_root)
 sys.path.append(str(project_root))
 from Gen_AI_Project.Valence_Arousal_Speech.Speech_VA import (
     classify_emotion, get_valence_arousal_lexicon, transcription_model)
@@ -98,12 +99,12 @@ atexit.register(cleanup_midi)
 
 # --- MODEL LOADING ---
 print("Loading model...")
-main_output_dir = os.path.join(os.path.dirname(__file__), "../output")
+main_output_dir = project_root / 'Gen_AI_Project' / 'midi_emotion' /'output'
 model_path = os.path.join(main_output_dir, MODEL_DIR)
 config = torch.load(os.path.join(model_path, 'model_config.pt'))
 maps = torch.load(os.path.join(model_path, 'mappings.pt'))
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-from models.build_model import build_model
+from Gen_AI_Project.midi_emotion.src.models.build_model import build_model
 
 model, _ = build_model(None, load_config_dict=config)
 model.load_state_dict(torch.load(os.path.join(model_path, 'model.pt'), map_location=device))

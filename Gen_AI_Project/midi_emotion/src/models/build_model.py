@@ -28,15 +28,15 @@ def build_model(args, load_config_dict=None):
 
     if args["regression"]:
         config["output_size"] = 2
-        from models.music_regression \
+        from .music_regression \
                 import MusicRegression as MusicTransformer
 
     elif args["conditioning"] == "continuous_token":
-        from models.music_continuous_token \
+        from .music_continuous_token \
                 import MusicTransformerContinuousToken as MusicTransformer
         del config["d_condition"]
     else:
-        from models.music_multi \
+        from .music_multi \
                 import MusicTransformerMulti as MusicTransformer
 
     model = MusicTransformer(**config)

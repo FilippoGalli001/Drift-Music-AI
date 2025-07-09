@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI & MIDI Control Center</title>
+    <!-- Link al file CSS esterno -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="main-content">
+    <div class="container controller-container">
+        <h1>Control Center</h1>
+        <!-- UNIFIED AUDIO INPUT -->
+        <div class="control-group">
+            <label for="audioFileInput">Upload a .wav file or record audio</label>
+            <input type="file" id="audioFileInput" accept=".wav,audio/wav">
+            <div class="record-button-group">
+                <button id="recordButton">🎤 Record Audio</button>
+            </div>
+            <div id="fileName" class="file-name-display">No audio source selected</div>
+        </div>
+
+        <!-- AI GENERATION CONTROLS -->
+        <h2>Real-time AI Music Generation</h2>
+        <div class="button-group">
+            <button id="startAiButton" disabled>▶ Start Generation</button>
+            <button id="stopAiButton" disabled>■ Stop Generation</button>
+        </div>
+        <div id="aiStatus" class="status-box">Status: Awaiting audio analysis</div>
+
+        <!-- MAPPED MIDI CONTROLS -->
+        <h2 style="margin-top: 30px;">Emotion-Mapped MIDI Player</h2>
+        <div class="button-group">
+            <button id="playMappedMidiButton" disabled>▶ Play Mapped MIDI</button>
+            <button id="stopMidiButton" disabled>■ Stop MIDI</button>
+        </div>
+        <div id="midiStatus" class="status-box">Status: Awaiting audio analysis</div>
+    </div>
+
+    <div class="container chart-container">
+        <h2 id="emotion-display">Emotion Map</h2>
+        <div id="emotion-wheel">
+            <div id="neutral-zone">Neutral</div>
+            <div id="click-marker"></div>
+        </div>
+        <div class="va-info">
+            <div>Valence: <strong id="valence-display">-</strong></div>
+            <div>Arousal: <strong id="arousal-display">-</strong></div>
+        </div>
+        <div id="results" class="results-box" style="text-align: left; width: 100%; margin-top:20px;"></div>
+    </div>
+</div>
+
+<!-- Script "ponte" per passare i dati da Python a JavaScript -->
+<script>
+    const EMOTIONS_DATA = {{ emotions | tojson }};
+    const NEUTRAL_RADIUS = {{ neutral_radius }};
+</script>
+
+<!-- Link al file JavaScript esterno. 'defer' assicura che venga eseguito dopo il caricamento dell'HTML -->
+<script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 **Drift** is an interactive generative music installation that translates the emotional content of the human voice into a personal, evolving ambient soundscape. The project creates a bio-creative feedback loop: your voice generates music that reflects your emotional state, and in turn, this soundscape provides a space for reflection and introspection.
 
-Developed by Filippo Galli, Jing Yu, and Lianne Sánchez-Rodríguez, mentored by Fernando García.
+Developed by Filippo Galli [FilippoGalli001](https://github.com/FilippoGalli001), Jing Yu, and Lianne Sánchez-Rodríguez [liannesr](https://github.com/liannesr), mentored by Fernando García.
 
 
 
@@ -14,9 +14,9 @@ By analyzing the emotion in a user's voice, we generate a unique sonic environme
 
 ## Features
 
--   **Real-time Emotion Analysis:** Captures valence (positivity/negativity) and arousal (energy/calmness) from spoken words.
--   **Dual-Path Voice Analysis:** Combines prosodic (intonation) and semantic (textual) analysis for a more robust emotional reading.
--   **AI-Powered MIDI Generation:** Uses the `midi-emotion` model to create multi-instrument symbolic music based on the detected emotion.
+-   **Real-time Emotion Analysis:** Captures valence and arousal from spoken words.
+-   **Dual-Path Voice Analysis:** Combines intonation and semantic analysis for a more robust emotional reading.
+-   **MIDI Generation:** Uses the `midi-emotion` model to create multi-instrument symbolic music based on the detected emotion.
 -   **Live Sound Synthesis:** Streams MIDI data via **OSC** to a custom **Max/MSP** patch that acts as a complex ambient synthesis engine.
 -   **Interactive Web Interface:** A simple front-end allows users to record their voice and control the generation process.
 

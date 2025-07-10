@@ -2,7 +2,7 @@
 
 **Drift** is an interactive generative music installation that translates the emotional content of the human voice into a personal, evolving ambient soundscape. The project creates a bio-creative feedback loop: your voice generates music that reflects your emotional state, and in turn, this soundscape provides a space for reflection and introspection.
 
-Developed by Filippo Galli [FilippoGalli001](https://github.com/FilippoGalli001), Jing Yu, and Lianne Sánchez-Rodríguez [liannesr](https://github.com/liannesr), mentored by Fernando García.
+Developed by Filippo Galli ([FilippoGalli001](https://github.com/FilippoGalli001)), Jing Yu, and Lianne Sánchez-Rodríguez ([liannesr](https://github.com/liannesr)), mentored by Fernando García.
 
 
 

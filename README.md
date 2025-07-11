@@ -8,9 +8,9 @@ Developed by Filippo Galli ([FilippoGalli001](https://github.com/FilippoGalli001
 
 ## Core Concept
 
-The project is inspired by Michael Viega's concept of **"listening in the ambient mode"**. Instead of creating a structured song, Drift generates a soundscape that is, in the words of Brian Eno, "as ignorable as it is interesting."
+The project is inspired by Michael Viega's concept of **"listening in the ambient mode"**.
 
-By analyzing the emotion in a user's voice, we generate a unique sonic environment in real-time. This invites the listener to "drift" through the textures and atmospheres of the sound, facilitating a state of mindful listening and potentially making them aware of "distant or forgotten parts of one's self."
+By analyzing the emotion in a user's voice, we generate a unique environment in real-time that invites the listener to "drift" through the textures and atmospheres of the sound, facilitating a state of mindful listening and potentially making them aware of "distant or forgotten parts of one's self."
 
 ## Features
 
@@ -28,7 +28,7 @@ The system processes audio through a multi-stage pipeline to generate sound:
     -   The user's voice is captured through the web interface.
     -   **Prosodic Analysis:** A pre-trained **Wav2Vec2** model analyzes the audio's intonation, rhythm, and timbre to extract valence and arousal values.
     -   **Semantic Analysis:** **OpenAI's Whisper** transcribes the speech to text. The text is then analyzed using the **NRC-VAD Lexicon** to find the corresponding valence and arousal scores for the words used.
-    -   **Fused Emotion:** The results from both paths are combined via a weighted average to produce a final, more accurate `(Valence, Arousal)` coordinate.
+    -   **Fused Emotion:** The results from both paths are combined via a weighted average to produce a final `(Valence, Arousal)` coordinate.
 
 2.  **Emotion-to-MIDI Generation (Python)**
     -   The `(Valence, Arousal)` values are fed into the **`midi-emotion`** generative model.
@@ -62,7 +62,7 @@ The system processes audio through a multi-stage pipeline to generate sound:
                     └── continuous_concat/
                         ├── model.pt
                         ├── model_config.pt
-                        └── ... (other extracted files)
+                        └── ...
         ```
 
 2.  **Run the Application:**
